@@ -2,8 +2,11 @@
 
 import json;
 
-## load the dataframe dumped data
+## load the dataframe dumped data for transformation from the full_grouped.csv data set
 jsonDataSet = json.load(open("data.json", "r"));
+
+## load the country specific Latitude and Longitude information from the covid_19_clean_complete.csv data set
+jsonLatitudeLongitudeByCountryDataSet = json.load(open("latitudeLongitudeByCountry.json", "r"));
 
 ## Clean the pandas JSON dumped data into columnKey and column data arrays in a tuple pair
 jsonDataSetKV = [ (columnKey, [ v for k,v in columnData.items() ]) for columnKey, columnData in jsonDataSet.items() ];
@@ -22,9 +25,13 @@ dateSet = set();
 
 ## iterate over all of the data entries to recreate the data points
 for x in range(entries):
-    
+
     ## generate the dictionary for the current entry's row data by iterating over all columnKeys and mapping to the specific information of a entry per column
     dataPoint = { columnKeys[y]: jsonDataSetKV[y][1][x] for y in range(len(columnKeys)) };
+
+    ## reformat the US across all data points to United States instead of US
+    if dataPoint["Country/Region"] == "US":
+        dataPoint["Country/Region"] = "United States";
 
     ## split the date by - to reformat it from YYYY-MM-DD to MM-DD-YYYY
     dateSplit = dataPoint["Date"].split("-");
@@ -38,10 +45,6 @@ for x in range(entries):
     if dataPoint["Date"] not in dateSet:
         dateSet.add(dataPoint["Date"]);
         formattedDataSet["structuredDateGroupedData"].append([  ]);
-
-    ## reformat the US across all data points to United States instead of US
-    if dataPoint["Country/Region"] == "US":
-        dataPoint["Country/Region"] = "United States";
 
     ## add the current data point to the end of the latest day as we are in-order by date
     formattedDataSet["structuredDateGroupedData"][-1].append(dataPoint);
@@ -81,14 +84,16 @@ for x in range(len(formattedDataSet["structuredDateGroupedData"])):
     
     ## destructure the local day data
     totalDayDeaths, totalDayConfirmed, countrySpread = newDataFormat[x];
-    countrySpreadCopy = countrySpread[::];
-    countrySpread.sort(key=lambda countryData: countryData["Confirmed"]);
+    countrySpread.sort(key=lambda countryData: countryData["dayOfConfirmed"], reverse=True);
     # reformat data point with new information
     formattedDataSet["structuredDateGroupedData"][x] = {
         "totalDayDeaths": totalDayDeaths,
         "totalDayConfirmed": totalDayConfirmed,
         "countrySpread" : [ countrySpread ]
     };
+
+## Added the Country/Region Specific Latitude and Longitude Information to the JSON data set in a non redundant manner
+formattedDataSet["Country/Region Specific Geographic Coordinates"] = jsonLatitudeLongitudeByCountryDataSet;
     
 ## write the file to a json
 with open("transformedData.json", "w") as f:
