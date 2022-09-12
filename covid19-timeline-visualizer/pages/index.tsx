@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
@@ -36,7 +37,6 @@ interface CountryLocation {
 // };
 
 const dset:any = DATASET;
-
 
 interface mapAppProps {
   setTooltipContent: Function,
@@ -150,34 +150,36 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
                 const isG19 = dset["Country/Region Specific Geographic Coordinates"][name] !== undefined;
                 
                 // Return the respective Geographic Component based off customization
-                return <Geography
-                key={geo.rsmKey} geography={geo}
+                return <Link href={ `/countries/${isG19 ? name : ""}` }>
+                  <Geography
+                  key={geo.rsmKey} geography={geo}
 
-                // Add name to tooltip on mouse enter
-                onMouseEnter={() => { setTooltipContent(name); }}
-                
-                // Remove name to tooltip on mouse leave
-                onMouseLeave={() => { setTooltipContent(""); }}
+                  // Add name to tooltip on mouse enter
+                  onMouseEnter={() => { setTooltipContent(name); }}
+                  
+                  // Remove name to tooltip on mouse leave
+                  onMouseLeave={() => { setTooltipContent(""); }}
 
-                // Multiple object of styles by default (at rest), on hover, and on press for a given geography
-                style={{
-                  // This is where the heat map changes are applied (the opacity)
-                  default: {
-                    fill: setCountryColor(isG19),
-                    outline: "none",
-                    opacity: calculateOpacity(name, isG19)
-                  },
-                  hover: {
-                    fill: "blue",
-                    outline: "none",
-                    opacity: 0.5
-                  },
-                  pressed: {
-                    fill: "#E42",
-                    outline: "none"
-                  }
-                }}
-                />
+                  // Multiple object of styles by default (at rest), on hover, and on press for a given geography
+                  style={{
+                    // This is where the heat map changes are applied (the opacity)
+                    default: {
+                      fill: setCountryColor(isG19),
+                      outline: "none",
+                      opacity: calculateOpacity(name, isG19)
+                    },
+                    hover: {
+                      fill: "blue",
+                      outline: "none",
+                      opacity: 0.5
+                    },
+                    pressed: {
+                      fill: "#E42",
+                      outline: "none"
+                    }
+                  }}
+                  />
+                </Link>
               }) }
             }
           </Geographies>
