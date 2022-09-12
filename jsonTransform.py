@@ -89,7 +89,7 @@ for x in range(len(formattedDataSet["structuredDateGroupedData"])):
     formattedDataSet["structuredDateGroupedData"][x] = {
         "totalDayDeaths": totalDayDeaths,
         "totalDayConfirmed": totalDayConfirmed,
-        "countrySpread" : [ countrySpread ]
+        "countrySpread": countrySpread
     };
 
 ## Added the Country/Region Specific Latitude and Longitude Information to the JSON data set in a non redundant manner
