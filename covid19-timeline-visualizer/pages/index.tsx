@@ -198,7 +198,7 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
           <div>
             {
               dset["structuredDateGroupedData"][day]["countrySpread"].slice(0,10).map((countryData:any, rankingIndex:number) =>
-                <RankingCard countryRanking={ rankingIndex+1 } countryName={ countryData["Country/Region"] } countryEmojiFlag={ "" } key={ countryData["Country/Region"][rankingIndex+1] } />
+                <RankingCard countryRanking={ rankingIndex+1 } countryName={ countryData["Country/Region"] } countryEmojiFlag={ "" } key={ `${countryData["Country/Region"]}${rankingIndex+1}` } />
               )
             }
           </div>
