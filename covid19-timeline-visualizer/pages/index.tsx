@@ -125,7 +125,7 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
 
       {/* Shows the current date along with the current week based on the day index */}
       <h3>
-        Made by Zain Yousaf Fuentes, Khoi Vu, John Huber, and Patrick Ingram at ShellHacks 2022
+        Made by Zain Yousaf Fuentes, Khoi Vu, and John Huber at ShellHacks 2022
       </h3>
 
       <a target={"_blank"} rel="noreferrer" href="https://github.com/zeyf/shellhacks2022project" style={{ color: "red", fontSize: 24, fontWeight: "bold" }}>
