@@ -47,7 +47,7 @@ const countryPage = ({ country }:any) => {
             </h1>
             <div style={{ width: "100vw", display: "flex", justifyContent: "space-around", alignItems: "center" }}>
                 <video controls src={ `/videoGraphs/${country}.mp4` } autoPlay />
-                <Image src={ `/staticGraphs/${country}.png` } />
+                <img src={ `/staticGraphs/${country}.png` } />
             </div>
             <div style={{ width: "100vw", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <h1> Confirmed Cases: <span style={{ color: "red" }}>{ countryData["Confirmed"] } </span> from 01/22/2020 - 07/27/2022 </h1>
