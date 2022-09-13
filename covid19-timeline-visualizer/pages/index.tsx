@@ -157,7 +157,7 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
                 const isG19 = dset["Country/Region Specific Geographic Coordinates"][name] !== undefined;
                 
                 // Return the respective Geographic Component based off customization
-                return <Link href={ isG19 ? `/countries/${ name }` : "" }>
+                return <Link key={name} href={ isG19 ? `/countries/${ name }` : "" }>
                   <Geography
                     key={geo.rsmKey} geography={geo}
 
