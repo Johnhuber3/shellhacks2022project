@@ -128,7 +128,7 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
         Made by Zain Yousaf Fuentes, Khoi Vu, John Huber, and Patrick Ingram at ShellHacks 2022
       </h3>
 
-      <a target={"_blank"} href="https://github.com/zeyf/shellhacks2022project" style={{ color: "red", fontSize: 24, fontWeight: "bold" }}>
+      <a target={"_blank"} rel="noreferrer" href="https://github.com/zeyf/shellhacks2022project" style={{ color: "red", fontSize: 24, fontWeight: "bold" }}>
         LINK TO GITHUB REPO
       </a>
       <h1 style={{ fontSize: 40 }}>
