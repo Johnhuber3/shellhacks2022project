@@ -124,6 +124,13 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
     <div style={{ height: "75vh" }}>
 
       {/* Shows the current date along with the current week based on the day index */}
+      <h3>
+        Made by Zain Yousaf Fuentes, Khoi Vu, John Huber, and Patrick Ingram at ShellHacks 2022
+      </h3>
+
+      <a target={"_blank"} href="https://github.com/zeyf/shellhacks2022project" style={{ color: "red", fontSize: 24, fontWeight: "bold" }}>
+        LINK TO GITHUB REPO
+      </a>
       <h1 style={{ fontSize: 40 }}>
         { `${ dset["structuredDateGroupedData"][day]["countrySpread"][0]["Date"] } | Week ${ calculateWeek() }` } 
       </h1>
@@ -150,34 +157,47 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
                 const isG19 = dset["Country/Region Specific Geographic Coordinates"][name] !== undefined;
                 
                 // Return the respective Geographic Component based off customization
-                return <Link href={ `/countries/${isG19 ? name : ""}` }>
+                return <Link href={ isG19 ? `/countries/${ name }` : "" }>
                   <Geography
-                  key={geo.rsmKey} geography={geo}
+                    key={geo.rsmKey} geography={geo}
 
-                  // Add name to tooltip on mouse enter
-                  onMouseEnter={() => { setTooltipContent(name); }}
-                  
-                  // Remove name to tooltip on mouse leave
-                  onMouseLeave={() => { setTooltipContent(""); }}
+                    // Add name to tooltip on mouse enter
+                    onMouseEnter={() => {
+                      if (!isG19) setTooltipContent(name);
+                      else {
+                        // get the information object of the current day worldwide including total confirmed cases, total deaths, and country spread of these metrics on a given day across the world
+                        const worldwideDayData = dset["structuredDateGroupedData"][day];
 
-                  // Multiple object of styles by default (at rest), on hover, and on press for a given geography
-                  style={{
-                    // This is where the heat map changes are applied (the opacity)
-                    default: {
-                      fill: setCountryColor(isG19),
-                      outline: "none",
-                      opacity: calculateOpacity(name, isG19)
-                    },
-                    hover: {
-                      fill: "blue",
-                      outline: "none",
-                      opacity: 0.5
-                    },
-                    pressed: {
-                      fill: "#E42",
-                      outline: "none"
-                    }
-                  }}
+                        // since we have ensured we are dealing with a G19 country, search for it's data in the countrySpread on the given day.
+                        const countryOnDay = worldwideDayData["countrySpread"].filter((countryData: any) => countryData["Country/Region"] === name)[0];
+                        const { dayOfConfirmed, dayOfDeaths, Confirmed, Deaths, Date } = countryOnDay;
+                        setTooltipContent(`${ name } (${ Date })\nConfirmed Today: ${ dayOfConfirmed }\nDeaths Today: ${ dayOfDeaths }\n`);
+
+                      };
+                    }}
+                    
+                    // Remove name to tooltip on mouse leave
+                    onMouseLeave={() => { setTooltipContent(""); }}
+
+                    // Multiple object of styles by default (at rest), on hover, and on press for a given geography
+                    style={{
+                      // This is where the heat map changes are applied (the opacity)
+                      default: {
+                        fill: setCountryColor(isG19),
+                        outline: "none",
+                        opacity: calculateOpacity(name, isG19)
+                      },
+                      hover: {
+                        fill: "blue",
+                        outline: "none",
+                        opacity: 0.5
+                      },
+                      pressed: {
+                        fill: "blue",
+                        outline: "none",
+                        opacity: 0.75
+                      }
+                    }}
                   />
                 </Link>
               }) }
@@ -188,7 +208,7 @@ const HeatMapVisualization = ({ setTooltipContent, tooltipContent }: mapAppProps
           {
             markerData.map(([country, coordinateData]:any /* marker */) => {
               return <Marker key={country} coordinates={[ coordinateData["Longitude"], coordinateData["Latitude"] ]}>
-              <circle r={2.5} fill="#F00" stroke="#fff" strokeWidth={0.25} />
+              <circle r={2.5} fill="blue" stroke="#fff" strokeWidth={0.25} />
             </Marker>
             })
           }
@@ -225,7 +245,12 @@ const Home: NextPage = () => {
       <section>
         <HeatMapVisualization setTooltipContent={ setTooltipContent } tooltipContent={ tooltipContent } />
           <ReactTooltip>
-            { tooltipContent }
+            {
+              tooltipContent !== "" &&
+              <span style={{ padding: "5px 15px", borderRadius: "10px", backgroundColor: "black", color: "white" }}>
+                { tooltipContent }
+              </span>
+            }
           </ReactTooltip>
       </section>
     </div>
